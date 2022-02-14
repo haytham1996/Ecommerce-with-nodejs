@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import http from 'http'
 import Config from './config/config.js'
+import apiRouter from './routes/router.js'
 
 
 const {DB, ENV} = Config
@@ -19,9 +20,8 @@ const server = http.createServer(app);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/", () => {
-    console.log('hello world')
-})
+// Utilise v1 comme prefix pour l'API
+app.use('/v1', apiRouter);
 
 server.listen(process.env.PORT, () => {
     const { address } = server.address()
