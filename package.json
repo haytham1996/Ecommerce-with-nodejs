@@ -13,11 +13,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.1",
     "dotenv": "^12.0.4",
     "esm": "^3.2.25",
     "express": "^4.17.2",
     "mongoose": "^6.1.6",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "validator": "^13.7.0"
   }
 }
