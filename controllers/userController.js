@@ -1,19 +1,30 @@
 import userService from "../services/userService"
+import { hash } from 'bcrypt'
 
 const saltRounds = 10 
 
 export const registerUser = async (req, res) => {
-    hash(req.body.password, saltRounds, (err, hash) => {
+    const { password } = req.body
         try {
-            await new userService().registerUser(req.body, hash)
-            return res.json(data)
+          const hashh = await hash(password, saltRounds)
+          const user = await new userService().registerUser(req.body, hashh)
+          return res.json(user)
         }
         catch(error) {
-            throw new Error(error && error.message)
+            res.status(error.status).send(error.message)
         }
-        
-          
-          })
-          
-         
+}
+           
+export const loginUser = async (req, res) => {
+    
+    const {email, password}= req.body
+    try {
+    
+       const user = await new userService().loginUser(email, password)
+       return res.json(user)  
+    }
+    catch(error) {
+        res.status(error.status).send(error.message)
+    }
+    
 }

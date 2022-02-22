@@ -5,3 +5,10 @@ export const orderStatus = {
     CANCELED: 'canceled',
     FAILED: 'failed'
   }
+
+  export const AUTH_ROLES = {
+    USER: 'user',
+    ADMIN: 'admin',
+    SUPER_ADMIN: 'super_admin',
+
+  }

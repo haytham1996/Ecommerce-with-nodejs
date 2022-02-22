@@ -15,6 +15,7 @@ const app = express()
 
 
 // Parseur du body pour les requêtes
+app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 
 // Utilise v1 comme prefix pour l'API

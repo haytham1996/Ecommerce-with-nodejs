@@ -26,7 +26,7 @@ const userSchema = Schema({
   telephone: {
     type: String,
     // required: true,
-    minLenght: 10
+    //minLenght: 10
   },
   password: {
     type: String,
@@ -51,10 +51,8 @@ const userSchema = Schema({
   
   passwordResetCode: String,
   passwordResetExpiration: Date,
-  pushToken: String,
-  lastConnection: Date,
   lastPurchase: Date,
-},{timestamp: true})
+},{timestamps: true})
 
 
 export default module = mongoose.model('User', userSchema)
