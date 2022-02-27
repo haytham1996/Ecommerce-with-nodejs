@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import validator from 'validator'
+import { AUTH_ROLES } from './Enum'
 
 const userSchema = Schema({
   nom: {
@@ -32,6 +33,15 @@ const userSchema = Schema({
     type: String,
     // required: true,
   },
+
+  roles : [{
+    type: String, 
+    Enum: [
+      AUTH_ROLES.ADMIN, 
+      AUTH_ROLES.USER
+    ]
+
+  }],
 
   adresses: [{
     streetAdress: {

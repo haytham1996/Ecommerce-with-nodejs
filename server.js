@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import Config from './config/config.js'
+import { verifyJWT } from './middlewares/verifyJWT.js'
 import apiRouter from './routes/router.js'
 
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Utilise v1 comme prefix pour l'API
 app.use('/v1', apiRouter);
+
 
 app.listen(process.env.PORT, () => {
     console.log(`Listening `)

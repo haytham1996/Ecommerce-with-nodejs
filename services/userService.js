@@ -6,9 +6,10 @@ import Config from "../config/config"
 import { compare  } from "bcrypt"
 import ForbiddenError from "../errors/ForbiddenError"
 
+
 export default class userService {
 
-    async registerUser({email, telephone, prenom, nom, pushToken, adresses}, hash) {
+    async registerUser({email, telephone, prenom, nom, adresses}, hash) {
        
       const user = await User.findOne({ email })
        
@@ -20,7 +21,7 @@ export default class userService {
           telephone,
           prenom,
           nom,
-          pushToken,
+          roles: ["user"],
           adresses,
         
         })
@@ -35,12 +36,18 @@ export default class userService {
     async loginUser(email, password) {
      
       const user = await userService.findByCredentials(email, password)
-      const token = await userService.generateAuthToken(user)
+      const token = await userService.generateAuthToken(user, user.roles)
       return { token, user }
+
     }
 
-    static async generateAuthToken(user) {
-      const token = sign({ _id: user._id, role: AUTH_ROLES.USER }, Config.TOKEN_PASSWORD )
+
+
+    static async generateAuthToken(user, role) {
+      const token = sign({"UserInfo": {
+        "id": user._id,
+        "roles": role
+    } }, Config.TOKEN_PASSWORD )
       return token
     }
 
@@ -58,6 +65,7 @@ export default class userService {
       return user
     }
    
+ 
 
 
 }
