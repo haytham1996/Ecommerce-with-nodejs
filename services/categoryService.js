@@ -8,7 +8,6 @@ export default class CategoryService {
     if (category) {
       throw new ForbiddenError('Categorie deja existante');
     }
-
     category = new Category();
     Object.assign(category, {
       name
@@ -35,11 +34,9 @@ export default class CategoryService {
 
   static async deleteCategory(categoryId) {
     const category = await Category.findById(categoryId);
-
     if (!category) {
       throw new NotFoundError('Categorie introuvable')
     }
-
     await category.remove()
     return;
   };
@@ -56,7 +53,7 @@ export default class CategoryService {
 
   static async getAllCategories() {
     const categories = await Category.find({});
-
+   
     if (!categories) {
       throw new NotFoundError('Aucune categorie trouvée')
     }

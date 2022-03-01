@@ -16,17 +16,13 @@ const orderSchema = new Schema({
     },
     billNumber: {
       type: String,
-      sparse: true,
       unique: true,
     },
     totalPrice: {
       type: Number,
       required: true,
     },
-    reducedTotalPrice: {
-      type: Number,
-    },
-
+ 
     deliveryAdress: {
         streetAdress: String,
         zipCode: String,
@@ -57,18 +53,14 @@ const orderSchema = new Schema({
       type: Schema.ObjectId,
       ref: 'User',
     },
-    paymentIntentId: {
-      type: String,
-      unique: true,
-      sparse: true,
-    },
-     transactionDate: Date, 
+
      products: [{
         _id: false,
         productId: {
             type: Schema.ObjectId,
             ref: 'Product',
           },
+        price: Number, 
         name: String,
         quantity: {
             type: Number, 
@@ -76,8 +68,6 @@ const orderSchema = new Schema({
         }
   
         }],
-   
-      date: { type: Date, default: Date.now },
    
   },{timestamps:true})
 

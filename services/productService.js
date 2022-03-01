@@ -3,21 +3,23 @@ import Product from "../models/Product"
 import { extend } from 'lodash'
 
 export default class ProductService {
-   static async createProduct(productData) {
+    
+     static async createProduct(productData) {
         const product = new Product(productData)
         return await product.save()
       }
     
-      static async updateProduct(productId, productData) {
+
+     static async updateProduct(productId, productData) {
         let product = await Product.findById(productId)
-    if (!product) throw new NotFoundError('Produit introuvable')
+        if (!product) throw new NotFoundError('Produit introuvable')
         
         product = extend(product, productData)
         await product.save()
         return product
       }
     
-      async deleteProduct(productId) {
+     static async deleteProduct(productId) {
         const product = await Product.findById(productId)
         if (!product) {
           throw new NotFoundError('Produit introuvable')
@@ -25,7 +27,7 @@ export default class ProductService {
          await product.remove()
       }
 
-      static async getProduct(productId) {
+     static async getProduct(productId) {
         const product = await Product.findById(productId)
         if (!product) {
           throw new NotFoundError('Produit introuvable')
@@ -33,9 +35,8 @@ export default class ProductService {
         return product
       }
      
-      static async getAllProducts() {
+     static async getAllProducts() {
         const products = await Product.find({});
-    
         if (!products) {
           throw new NotFoundError('Aucun produit trouvée')
         }
