@@ -53,7 +53,7 @@ export default class orderService {
   static async getAllOrders() {
     const orders = await Order.find({});
    
-    if (!categories) {
+    if (!orders) {
       throw new NotFoundError('Aucune commande trouvée')
     }
 
