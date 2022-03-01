@@ -1,6 +1,8 @@
 import express, { Router } from 'express'
 import userRouter from './userRoutes'
 import authRouter from './authRoutes'
+import categoryRouter from './categoryRoutes'
+import productRouter from './productRoutes'
 import { verifyJWT } from '../middlewares/verifyJWT'
 
 
@@ -8,6 +10,8 @@ const appRoutes = express()
 
 
 appRoutes.use('/auth/', authRouter)
+appRoutes.use('/category/', categoryRouter)
+appRoutes.use('/product/', productRouter)
 appRoutes.use(verifyJWT)
 appRoutes.use('/user/', userRouter)
 

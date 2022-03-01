@@ -10,7 +10,8 @@ const productSchema = new Schema({
         type: String
       },
       category: {
-        type: String
+        type: Schema.ObjectId,
+        ref: 'Category'
       },
       price: {
         type: Number,

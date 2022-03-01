@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose'
 import { orderStatus } from './Enum'
 
 
-var orderSchema = new Schema({
+const orderSchema = new Schema({
    
     status: {
       type: String,

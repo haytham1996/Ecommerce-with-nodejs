@@ -5,6 +5,6 @@ const router = expres()
 
 router.post('/register', registerUser)
 router.post('/login', loginUser)
-router.post('/admin', loginAdmin)
+//srouter.post('/admin', loginAdmin)
 
 export default router
