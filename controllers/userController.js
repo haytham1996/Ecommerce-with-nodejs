@@ -1,66 +1,56 @@
-import userService from "../services/userService"
-import { hash } from 'bcrypt'
+import User from "../models/User"
 
-const saltRounds = 10 
-
-export const registerUser = async (req, res) => {
-    const { password } = req.body
-        try {
-          const hashh = await hash(password, saltRounds)
-          const user = await new userService().registerUser(req.body, hashh)
-          return res.json(user)
-        }
-        catch(error) {
-            res.status(error.status).send(error.message)
-        }
-}
-           
-export const loginUser = async (req, res) => {
-    const {email, password}= req.body
+export const getUser =  async (req, res) => {
     try {
-       const user = await new userService().loginUser(email, password)
-       return res.json(user)  
-    }
-    catch(error) {
-        res.send(error.message)
-    }  
-}
+        const user = await User.findById(req.user).select('-password')
+        if(!user) return res.status(400).json({msg: "User does not exist."})
 
-export const loginAdmin = async (req, res) => {
-    const {email, password}= req.body
-    try {
-       const admin = await new userService().loginAdmin(email, password)
-       return res.json(admin)  
+        res.json(user)
+    } catch (err) {
+        return res.status(500).json({msg: err.message})
     }
-    catch(error) {
-        res.status(error.status).send(error.message)
-    }  
 }
-
 export const updateUser = async (req, res) => {
-    const { user, body } = req 
-    try {
-            const updatedUser = await new userService().updateUser(user, body)
-            return res.json(updatedUser)
+    try {  
+        const {email, telephone, prenom, nom, password, roles, adresses} = req.body;
+
+        const user = await User.findOne({email})
+
+        if(user) return res.status(400).json({msg: "The email already exists."})
+
+        await User.findOneAndUpdate({_id: req.user}, {
+            email, telephone, prenom, nom, password, roles, adresses
+                   })
+
+        res.json({msg: "User Updated"})
+
     } catch(error) {
         res.status(error.status).send(error.message)
     }
 }
 
-export const deleteUser = async (req, res, next) => {
-   try {
-       const deletedUser = await new userService().deleteUser(req.params.id)
-       return res.json(deletedUser)
-    
-  } catch(error) {
-    res.send(error.message)
-  }
+export const deleteUser = async (req, res) => {
+    try {
+
+       const deletedUser = await User.findByIdAndDelete(req.params.id)
+        
+       if(!deletedUser)  return res.status(500).json({msg: "User does not exist"})
+        
+        res.json({msg: "User Deleted"})
+    } catch (err) {
+        return res.status(500).json({msg: err.message})
+    }
 }
 
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await new userService().getAllUsers()
-        return res.json(users)
+        const projection = {password: false}
+        const users = await User.find({}, projection).sort('-created_at')
+      
+        if (!users) return res.status(500).json({msg: "No Users Found"})
+
+        res.json(users)
+      
     } catch(error) {
         res.send(error.message)
     }

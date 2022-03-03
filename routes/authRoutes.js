@@ -1,10 +1,9 @@
 import expres from "express"
-import { registerUser, loginUser, loginAdmin } from "../controllers/userController"
-
+import { register, login } from "../controllers/autController"
 const router = expres()
 
-router.post('/register', registerUser)
-router.post('/login', loginUser)
-//srouter.post('/admin', loginAdmin)
+router.post('/register', register)
+router.post('/login', login)
+
 
 export default router

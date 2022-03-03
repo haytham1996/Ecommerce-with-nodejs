@@ -22,7 +22,10 @@ const productSchema = new Schema({
         type: String,
         trim: true
       },
-      imagePath: String,
+      images:{
+        type: Object,
+        required: true
+    },
       userId: {
         type: Schema.ObjectId,
         ref: 'User'

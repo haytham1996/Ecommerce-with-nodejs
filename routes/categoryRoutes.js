@@ -1,13 +1,12 @@
 import express from 'express'
-import { addCategory, getCategory, updateCategory, deleteCategory, getAllCategories } from '../controllers/categoryController'
+import {getCategory, updateCategory, deleteCategory, getAllCategories, createCategory } from '../controllers/categoryController'
 
 const router = express.Router()
 
+router.post('/', createCategory)
 router.get('/all', getAllCategories)
-router.get('/:categoryId', getCategory)
-router.post('/', addCategory)
-router.put('/:categoryId', updateCategory)
-// router.put('/image/', categoryImgUpload.single('image'), compressCategoryImage)
-router.delete('/:categoryId', deleteCategory)
+router.get('/:id', getCategory)
+router.put('/:id', updateCategory)
+router.delete('/:id', deleteCategory)
 
 export default router

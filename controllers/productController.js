@@ -1,51 +1,78 @@
+import APIfeatures from "../helpers/features"
 import Product from "../models/Product"
-import ProductService from "../services/productService"
 
-export const addProduct = async (req, res) => {
- try { 
-      const product = await ProductService.createProduct(req.body)
-       return res.json(product).sendStatus(201)
-    } catch(error) {
-        res.send(error.message)
-    }
-     
-  }
-  
-  export const updateProduct = async (req, res) => {
-    try {
-        const product = await ProductService.updateProduct(req.params.productId, req.body)
-      return res.json(product)
-    } catch(error) {
-        res.send(error.message)
-    }
-  }
-  
-  export const getProduct = async (req, res) => { 
-    const product = await ProductService.getProduct(req.params.id)
-    return res.json(product)
-  }
-  
-  export const getAllProducts = async (req, res) => {
-     try {
-         const products =  await ProductService.getAllProducts()
-      return res.json(products)
-    } catch(error) {
-          res.send(error.message)
-      }
-  }
 
-  export const deleteProduct = async (req, res) => {
-    await ProductService.deleteProduct(req.params.productId)
-       res.sendStatus(204)
-     
-  }
+export const getProducts = async(req, res) => {
+  try {
+      const features = new APIfeatures(Product.find(), req.query)
+      .filtering().sorting().paginating()
+      const products = await features.query
 
-  export const getProductsByCategory = async (req, res) => {
-      const productsByCatgory = await Product.find({category: req.params.categoryId})
-      return res.json(productsByCatgory)
+      res.json({
+          status: 'success',
+          result: products.length,
+          products: products
+      })
+      
+  } catch (err) {
+      return res.status(500).json({msg: err.message})
   }
-
-  export const getProductsByUser = async (req, res) => {
-    const productsByUser = await Product.find({userId: req.params.userId})
-    return res.json(productsByUser)
 }
+
+export const createProduct = async(req, res) =>{
+  try {
+      const newProduct = new Product(req.body)
+
+      await newProduct.save()
+      res.json({msg: "Product Created"})
+
+  } catch (err) {
+      return res.status(500).json({msg: err.message})
+  }
+}
+
+export const deleteProduct = async(req, res) =>{
+  try {
+      await Product.findByIdAndDelete(req.params.id)
+      res.json({msg: "Deleted a Product"})
+  } catch (err) {
+      return res.status(500).json({msg: err.message})
+  }
+}
+
+export const updateProduct = async(req, res) =>{
+  try {
+      await Product.findOneAndUpdate({_id: req.params.id},req.body)
+       res.json({msg: "Product Updated"})
+  } catch (err) {
+      return res.status(500).json({msg: err.message})
+  }
+}
+export const getProduct =  async (req, res) => {
+  try {
+      const product = await Product.findById(req.params.id)
+      if(!product) return res.status(400).json({msg: "Product does not exist."})
+
+      res.json(product)
+  } catch (err) {
+      return res.status(500).json({msg: err.message})
+  }
+}
+
+export const getMyProducts = async(req, res) => {
+  try {
+      const features = new APIfeatures(Product.find({userId: req.user}), req.query)
+      .filtering().sorting().paginating()
+      const products = await features.query
+
+      res.json({
+          status: 'success',
+          result: products.length,
+          products: products
+      })
+      
+  } catch (err) {
+      return res.status(500).json({msg: err.message})
+  }
+}
+

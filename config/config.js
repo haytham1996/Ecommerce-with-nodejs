@@ -6,7 +6,8 @@ const Config = {
     DB: {
         CONNECTION_STRING: process.env.CONNECTION_STRING
     },
-    TOKEN_PASSWORD: process.env.TOKEN_PASSWORD
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_PASSWORD, 
+    REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_PASSWORD
 }
 
 

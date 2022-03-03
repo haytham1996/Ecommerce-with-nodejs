@@ -1,15 +1,16 @@
 import express from 'express'
-import { addProduct, getProduct, updateProduct, deleteProduct, getAllProducts, getProductsByCategory, getProductsByUser } from '../controllers/ProductController'
+import { createProduct, deleteProduct, getMyProducts, getProduct, getProducts, updateProduct } from '../controllers/ProductController'
+import { AUTH_ROLES } from '../models/Enum'
+import { authorize } from '/users/haytham/desktop/ala/ecommerce-api/middlewares/auth'
 
-const router = express.Router({caseSensitive: true})
+const router = express.Router()
 
-router.get('/all', getAllProducts)
+router.get('/all', getProducts)
 router.get('/:id', getProduct)
-router.post('/', addProduct)
-router.put('/:productId', updateProduct)
+router.post('/', createProduct)
+router.put('/:id', updateProduct)
 router.delete('/:productId', deleteProduct)
-//router.get('/:categoryId/', getProductsByCategory)
-//router.get('/:userId', getProductsByUser)
+router.get('/my/products', getMyProducts)
 
 
 export default router
