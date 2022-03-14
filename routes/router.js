@@ -13,9 +13,10 @@ const appRoutes = express()
 appRoutes.use('/auth/', authRouter)
 appRoutes.use('/category/', categoryRouter)
 appRoutes.use('/order/', orderRouter)
-appRoutes.use(verifyJWT)
 appRoutes.use('/product/', productRouter)
 appRoutes.use('/user/', userRouter)
+
+
 
 export const router = Router()
 router.get('/', (req, res) => {

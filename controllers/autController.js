@@ -1,6 +1,5 @@
 
 import { hash, compare } from 'bcrypt'
-import jwt from 'bcrypt'
 import { sign } from "jsonwebtoken"
 import User from '../models/User'
 import Config from '../config/config';

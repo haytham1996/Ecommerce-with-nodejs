@@ -1,7 +1,8 @@
 import express from 'express'
 import { deleteUser, getAllUsers, getUser, updateUser } from '../controllers/userController'
+import { authorize } from '../middlewares/auth'
 import { AUTH_ROLES } from '../models/Enum'
-import { authorize } from '/users/haytham/desktop/ala/ecommerce-api/middlewares/auth'
+
 
 const router = express.Router()
 

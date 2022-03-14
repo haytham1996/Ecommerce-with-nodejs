@@ -10,6 +10,6 @@ export const orderStatus = {
     USER: 'user',
     ADMIN: 'admin',
     SUPER_ADMIN: 'super_admin',
-    NO_TOKEN: 'no_token'
-
+    NO_TOKEN: 'no_token', 
+    SELLER: 'seller'
   }
