@@ -5,7 +5,7 @@ export const getUser =  async (req, res) => {
         const user = await User.findById(req.user).select('-password')
         if(!user) return res.status(400).json({msg: "User does not exist."})
 
-        res.json(user)
+        return res.json(user)
     } catch (err) {
         return res.status(500).json({msg: err.message})
     }
@@ -18,11 +18,11 @@ export const updateUser = async (req, res) => {
 
         if(user) return res.status(400).json({msg: "The email already exists."})
 
-        await User.findOneAndUpdate({_id: req.user}, {
+        const updatedUser= await User.findOneAndUpdate({_id: req.user}, {
             email, telephone, prenom, nom, password, roles, adresses
-                   })
+                   }, {new: true})
 
-        res.json({msg: "User Updated"})
+        return res.json(updatedUser)
 
     } catch(error) {
         res.status(error.status).send(error.message)
@@ -49,7 +49,7 @@ export const getAllUsers = async (req, res) => {
       
         if (!users) return res.status(500).json({msg: "No Users Found"})
 
-        res.json(users)
+        return res.json(users)
       
     } catch(error) {
         res.send(error.message)
