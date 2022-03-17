@@ -1,3 +1,5 @@
+import { hash } from "bcrypt"
+import { compare } from "bcrypt"
 import User from "../models/User"
 
 export const getUser =  async (req, res) => {
@@ -13,10 +15,8 @@ export const getUser =  async (req, res) => {
 export const updateUser = async (req, res) => {
     try {  
         const {email, telephone, prenom, nom, password, roles, adresses} = req.body;
-
         const user = await User.findOne({email})
-
-        if(user) return res.status(400).json({msg: "The email already exists."})
+          if(user) return res.status(400).json({msg: "The email already exists."})
 
         const updatedUser= await User.findOneAndUpdate({_id: req.user}, {
             email, telephone, prenom, nom, password, roles, adresses
@@ -54,4 +54,21 @@ export const getAllUsers = async (req, res) => {
     } catch(error) {
         res.send(error.message)
     }
+}
+
+export const updatePassword = async (req, res) => {
+    try {
+       
+        const { oldPassword, newPassword }= req.body 
+        const user = await User.findOne({_id: req.user._id})
+        const isMatch = await compare(oldPassword, user.password)
+        if(!isMatch) return res.status(400).json({msg: "Wrong password"})
+        const updatedPassword = await hash(newPassword, 10) 
+        const updatedUser = await User.findOneAndUpdate({_id: req.user._id}, {password: updatedPassword}, {new: true})
+         
+        return res.json(updatedUser)
+    } catch(error) {
+        res.send(error.message)
+    }
+
 }
