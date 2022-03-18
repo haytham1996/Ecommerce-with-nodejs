@@ -1,3 +1,5 @@
+import { hash } from "bcrypt"
+import { compare } from "bcrypt"
 import User from "../models/User"
 
 export const getUser =  async (req, res) => {
@@ -5,7 +7,7 @@ export const getUser =  async (req, res) => {
         const user = await User.findById(req.user).select('-password')
         if(!user) return res.status(400).json({msg: "User does not exist."})
 
-        res.json(user)
+        return res.json(user)
     } catch (err) {
         return res.status(500).json({msg: err.message})
     }
@@ -13,16 +15,14 @@ export const getUser =  async (req, res) => {
 export const updateUser = async (req, res) => {
     try {  
         const {email, telephone, prenom, nom, password, roles, adresses} = req.body;
-
         const user = await User.findOne({email})
+          if(user) return res.status(400).json({msg: "The email already exists."})
 
-        if(user) return res.status(400).json({msg: "The email already exists."})
-
-        await User.findOneAndUpdate({_id: req.user}, {
+        const updatedUser= await User.findOneAndUpdate({_id: req.user}, {
             email, telephone, prenom, nom, password, roles, adresses
-                   })
+                   }, {new: true})
 
-        res.json({msg: "User Updated"})
+        return res.json(updatedUser)
 
     } catch(error) {
         res.status(error.status).send(error.message)
@@ -49,9 +49,26 @@ export const getAllUsers = async (req, res) => {
       
         if (!users) return res.status(500).json({msg: "No Users Found"})
 
-        res.json(users)
+        return res.json(users)
       
     } catch(error) {
         res.send(error.message)
     }
+}
+
+export const updatePassword = async (req, res) => {
+    try {
+       
+        const { oldPassword, newPassword }= req.body 
+        const user = await User.findOne({_id: req.user._id})
+        const isMatch = await compare(oldPassword, user.password)
+        if(!isMatch) return res.status(400).json({msg: "Wrong password"})
+        const updatedPassword = await hash(newPassword, 10) 
+        const updatedUser = await User.findOneAndUpdate({_id: req.user._id}, {password: updatedPassword}, {new: true})
+         
+        return res.json(updatedUser)
+    } catch(error) {
+        res.send(error.message)
+    }
+
 }

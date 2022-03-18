@@ -5,7 +5,7 @@ import { AUTH_ROLES } from '../models/Enum'
 
 const router = express.Router()
 
-router.post('/', createCategory)
+router.post('/',authorize(AUTH_ROLES.ADMIN), createCategory)
 router.get('/all', getAllCategories)
 router.get('/:id', getCategory)
 router.put('/:id',authorize(AUTH_ROLES.ADMIN), updateCategory)

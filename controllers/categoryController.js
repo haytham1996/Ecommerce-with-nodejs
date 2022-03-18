@@ -10,7 +10,7 @@ export const createCategory = async (req, res) => {
     const newCategory = new Category({name})
 
     await newCategory.save()
-    res.json({msg: "Category created"})
+    return res.json(newCategory)
 
 } catch (err) {
     return res.status(500).json({msg: err.message})
@@ -22,7 +22,7 @@ export const getCategory =  async (req, res) => {
         const category = await Category.findById(req.params.id)
         if(!category) return res.status(400).json({msg: "Category does not exist."})
 
-        res.json(category)
+        return res.json(category)
     } catch (err) {
         return res.status(500).json({msg: err.message})
     }
@@ -35,9 +35,9 @@ export const updateCategory = async (req, res) => {
         const category = await Category.findOne({_id: req.params.id})
         if (!category) res.status(error.status).send("Category does not exists")
       
-        await Category.findOneAndUpdate({_id: req.params.id}, { name })
+       const updatedCategory= await Category.findOneAndUpdate({_id: req.params.id}, { name }, {new: true})
 
-        res.json({msg: "Category Updated"})
+        return res.json(updatedCategory)
 
     } catch(error) {
         res.status(error.status).send(error.message)
@@ -63,7 +63,7 @@ export const getAllCategories = async (req, res) => {
       
         if (!categories) return res.status(500).json({msg: "No Categories Found"})
 
-        res.json(categories)
+       return res.json(categories)
       
     } catch(error) {
         res.send(error.message)

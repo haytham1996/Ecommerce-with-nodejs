@@ -24,7 +24,7 @@ export const createProduct = async(req, res) =>{
       const newProduct = new Product(req.body)
 
       await newProduct.save()
-      res.json({msg: "Product Created"})
+      return res.json(newProduct)
 
   } catch (err) {
       return res.status(500).json({msg: err.message})
@@ -34,7 +34,7 @@ export const createProduct = async(req, res) =>{
 export const deleteProduct = async(req, res) =>{
   try {
       await Product.findByIdAndDelete(req.params.id)
-      res.json({msg: "Deleted a Product"})
+      return res.json({msg: "Deleted a Product"})
   } catch (err) {
       return res.status(500).json({msg: err.message})
   }
@@ -42,8 +42,8 @@ export const deleteProduct = async(req, res) =>{
 
 export const updateProduct = async(req, res) =>{
   try {
-      await Product.findOneAndUpdate({_id: req.params.id},req.body)
-       res.json({msg: "Product Updated"})
+      const updatedProduct= await Product.findOneAndUpdate({_id: req.params.id},req.body, {new: true})
+       return res.json(updatedProduct)
   } catch (err) {
       return res.status(500).json({msg: err.message})
   }
@@ -53,7 +53,7 @@ export const getProduct =  async (req, res) => {
       const product = await Product.findById(req.params.id)
       if(!product) return res.status(400).json({msg: "Product does not exist."})
 
-      res.json(product)
+       return res.json(product)
   } catch (err) {
       return res.status(500).json({msg: err.message})
   }
